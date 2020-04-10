@@ -6,3 +6,30 @@
 Также она должна сообщать пользователю о невозможности деления на ноль, если он ввел его в качестве делителя.
 """
 
+operation = None
+error_flag = False
+a = b = result = 0
+
+while operation != "0":
+    if error_flag:
+        error_flag = False
+    else:
+        a, b = map(int, input("Введите через пробел два числа: ").split())
+    operation = input("Введите знак операции (ноль для завершения): ")
+    if operation == "+":
+        result = a + b
+    elif operation == "-":
+        result = a - b
+    elif operation == "*":
+        result = a * b
+    elif operation == "/":
+        if b != 0:
+            result = a / b
+        else:
+            result = "На ноль делить нельзя"
+    elif operation != "0":
+        result = "Неверный знак операции"
+        error_flag = True
+    else:
+        continue
+    print(result)
