@@ -19,4 +19,4 @@ def rec_reverse(n):
 
 
 num = int(input("Введите целое число: "))
-print(rec_reverse(num))
+print(int(rec_reverse(num)))
