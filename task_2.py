@@ -4,24 +4,24 @@
 """
 
 
-def rec_len(num):
-    if num // 10 == 0:
+def rec_len(m):
+    if m // 10 == 0:
         return 1
     else:
-        return 1 + rec_len(num // 10)
+        return 1 + rec_len(m // 10)
 
 
-def rec_even_odd(num, even):
-    if rec_len(num) == 1:
-        if not num % 2:
+def rec_even_odd(n, even):
+    if rec_len(n) == 1:
+        if not n % 2:
             return 1 if even else 0
         else:
             return 1 if not even else 0
     else:
-        if not num % 10 % 2:
-            return 1 + rec_even_odd(num // 10, even) if even else rec_even_odd(num // 10, even)
+        if not n % 10 % 2:
+            return 1 + rec_even_odd(n // 10, even) if even else rec_even_odd(n // 10, even)
         else:
-            return 1 + rec_even_odd(num // 10, even) if not even else rec_even_odd(num // 10, even)
+            return 1 + rec_even_odd(n // 10, even) if not even else rec_even_odd(n // 10, even)
 
 
 num = int(input("Введите целое число: "))
