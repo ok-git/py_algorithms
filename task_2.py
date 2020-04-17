@@ -47,13 +47,13 @@ def prime(prime_count_target):
     prime_number = 2
     prime_count = 0  # счётчик простых чисел
     for num in a:
-        k = 0
+        k = 1
         for divider in range(2, num):
-            if k > 1:
-                break
             if num % divider == 0:
                 k += 1
-        prime_count += 1
+                break
+        else:
+            prime_count += 1
         if prime_count == prime_count_target:  # если достигли заданного номера простого числа, то ...
             prime_number = num  # берём значение простого числа и выходим из цикла
             break
