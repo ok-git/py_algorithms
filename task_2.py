@@ -13,9 +13,12 @@ prime(4)
 7
 """
 
+import timeit
+import cProfile
+
 
 def sieve(prime_count_target):
-    assert prime_count_target < 9593
+    assert prime_count_target < 9593, 'Value not supported'
     n = 100000
     a = [i for i in range(n)]  # создание массива с n количеством элементов
     a[1] = 0  # вторым элементом является единица, которую не считают простым числом
@@ -38,7 +41,7 @@ def sieve(prime_count_target):
 
 
 def prime(prime_count_target):
-    assert prime_count_target < 9593
+    assert prime_count_target < 9593, 'Value not supported'
     n = 100000
     a = [i for i in range(2, n)]  # создание массива с n количеством элементов
     prime_number = None  # переменная для искомого простого числа
@@ -55,10 +58,54 @@ def prime(prime_count_target):
     return prime_number
 
 
-print(sieve(24))
-print(sieve(1229))
-print(sieve(9592))
+def main():
+    sieve(1400)
+    prime(1400)
 
-print(prime(24))
-print(prime(1229))
-print(prime(9592))
+# print(sieve(24))
+# print(sieve(1229))
+# print(sieve(9592))
+#
+# print(prime(24))
+# print(prime(1229))
+# print(prime(9592))
+
+
+print(timeit.timeit("sieve(200)", number=100, globals=globals()))  # 2.6153535999999997
+print(timeit.timeit("sieve(400)", number=100, globals=globals()))  # 2.7296734
+print(timeit.timeit("sieve(600)", number=100, globals=globals()))  # 2.7996808
+print(timeit.timeit("sieve(800)", number=100, globals=globals()))  # 2.864568799999999
+print(timeit.timeit("sieve(1000)", number=100, globals=globals()))  # 2.915178299999999
+print(timeit.timeit("sieve(1200)", number=100, globals=globals()))  # 2.9472734999999997
+print(timeit.timeit("sieve(1400)", number=100, globals=globals()))  # 2.990636500000001
+
+print(timeit.timeit("prime(200)", number=100, globals=globals()))  # 1.0242764999999991
+print(timeit.timeit("prime(400)", number=100, globals=globals()))  # 3.4750795999999973
+print(timeit.timeit("prime(600)", number=100, globals=globals()))  # 7.9940949
+print(timeit.timeit("prime(800)", number=100, globals=globals()))  # 14.664172299999997
+print(timeit.timeit("prime(1000)", number=100, globals=globals()))  # 23.646438600000003
+print(timeit.timeit("prime(1200)", number=100, globals=globals()))  # 34.9518269
+print(timeit.timeit("prime(1400)", number=100, globals=globals()))  # 48.6583857
+
+cProfile.run("main()")
+"""
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.532    0.532 <string>:1(<module>)
+        1    0.025    0.025    0.028    0.028 task_2.py:20(sieve)
+        1    0.002    0.002    0.002    0.002 task_2.py:23(<listcomp>)
+        1    0.500    0.500    0.502    0.502 task_2.py:43(prime)
+        1    0.002    0.002    0.002    0.002 task_2.py:46(<listcomp>)
+        1    0.001    0.001    0.532    0.532 task_2.py:61(main)
+        1    0.000    0.000    0.532    0.532 {built-in method builtins.exec}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+=======
+Выводы:
+=======
+
+1. Алгоритм "решето  Эратосфена" оказался достаточно эффективен, несмотря на его возраст. Линейная асимптотика, высокое
+   быстродействие на всём диапазоне вводимых значений.
+2. Мой алгоритм иммеет нелинейную асимптотику. На числах менее 200, он значительно превосходит алгоритм
+   "решето Эратосфена", но на более высоких значениях выполняется очень долго, в десятки раз проигрывая ему по времени.
+
+"""
