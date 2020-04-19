@@ -5,7 +5,6 @@
 """
 
 from collections import defaultdict
-from collections import Counter
 
 avg_profit_for_all = 0
 sum_profit_for_all = 0
