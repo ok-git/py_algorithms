@@ -8,6 +8,12 @@ from collections import deque
 
 hex_a, hex_b = map(list, input('Введите два hex числа через пробел: ').split())
 
+len_dif = len(hex_a) - len(hex_b)
+if len_dif < 0:
+    hex_a = ['0'] * abs(len_dif) + hex_a
+if len_dif > 0:
+    hex_b = ['0'] * len_dif + hex_b
+
 base = deque('0123456789abcdef')  # шестнадцатиричная база для вычисления суммы hex чисел
 base.extend(['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1A', '1B', '1C', '1D', '1E', '1F'])
 
@@ -16,8 +22,8 @@ result_digit = ''  # результат сложения одного разря
 extra_digit = 0  # перенос в старший разряд, если результат сложения одного разряда 10 и более
 
 for digit_a, digit_b in zip(hex_a[::-1], hex_b[::-1]):  # одновременно итерируем числа hex_a, hex_b с младших разрядов
-    idx_a = base.index(digit_a)  # берём индекс очередной цифры числа hex_a
-    idx_b = base.index(digit_b)  # берём индекс очередной цифры числа hex_b
+    idx_a = base.index(digit_a)  # берём индекс в базе очередной цифры числа hex_a
+    idx_b = base.index(digit_b)  # берём индекс в базе очередной цифры числа hex_b
     base.rotate(-idx_b - extra_digit)  # сдвинули базу для получения результата сложения текущих цифр digit_a + digit_b
     result_digit = base[idx_a]  # запомнили результат
     base.rotate(idx_b + extra_digit)  # вернули базу в исходное
