@@ -7,17 +7,26 @@
 from collections import deque
 
 hex_a, hex_b = map(list, input('Введите два hex числа через пробел: ').split())
-base = deque('123456789abcdef')
+
+base = deque('0123456789abcdef')  # шестнадцатиричная база для вычисления суммы hex чисел
 base.extend(['10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '1A', '1B', '1C', '1D', '1E', '1F'])
 
-result = deque()
-extra_digit = 0
-for digit_a, digit_b in zip(hex_a[::-1], hex_b[::-1]):
-    if digit_a != '0' and digit_b != '0':
-        idx_a = base.index(digit_a)
-        idx_b = base.index(digit_b)
-        base.rotate(-idx_b - 1)  # сдвинули для получения результата сложения текущего разряда
-        result_digit = base[idx_a][-1]
-        base.rotate(idx_b + 1)  # вернули базу в исходное
-        result.appendleft(result_digit)
-print(result)
+result = deque()  # общий результат
+result_digit = ''  # результат сложения одного разряда
+extra_digit = 0  # перенос в старший разряд, если результат сложения одного разряда 10 и более
+
+for digit_a, digit_b in zip(hex_a[::-1], hex_b[::-1]):  # одновременно итерируем числа hex_a, hex_b с младших разрядов
+    idx_a = base.index(digit_a)  # берём индекс очередной цифры числа hex_a
+    idx_b = base.index(digit_b)  # берём индекс очередной цифры числа hex_b
+    base.rotate(-idx_b - extra_digit)  # сдвинули базу для получения результата сложения текущих цифр digit_a + digit_b
+    result_digit = base[idx_a]  # запомнили результат
+    base.rotate(idx_b + extra_digit)  # вернули базу в исходное
+    if len(result_digit) == 2:  # если результат двузначный, надо сделать перенос еденицы в старший разряд
+        extra_digit = int(result_digit[0])  # берём первую цифру для переноса в старший разряд
+        result_digit = result_digit[-1]  # берём последнюю цифру в качестве результата
+    else:  # иначе перехода через 10 не было и результат из одного символа
+        extra_digit = 0  # обнуляем перенос в старший разряд, если он был
+    result.appendleft(result_digit)  # добавили цифру к общему результату
+if extra_digit:  # если после сложения остался неиспользованный перенос в старший разряд, то...
+    result.appendleft(str(extra_digit))  # добавим его - пример FF + 1 = 100
+print(f'{"".join(hex_a)} + {"".join(hex_b)} = {"".join(result)}')
