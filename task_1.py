@@ -29,3 +29,38 @@ print("Количество кратных чисел, из исходного �
 for i in range(2, 10):
     print(f"{i} - {result[i]}")
 
+print()
+
+
+# Variant 2. With recursive function
+def rec_div(denominator, counter=0, i=2, max_i=99):
+    if i == max_i:
+        if i % denominator == 0:
+            counter += 1
+        return counter
+    if i % denominator == 0:
+        counter += 1
+    i += 1
+    return rec_div(denominator, counter, i)
+
+
+print("Количество чисел из массива от 2 до 99, кратных от 2 до 9")
+for num in range(2, 10):
+    print(f"{num} - {rec_div(num)}")
+
+print()
+
+
+# Variant 3. With generator
+def divider(n, m):
+    for denominator in range(2, n + 1):
+        counter = 0
+        for i in range(2, m + 1):
+            if i % denominator == 0:
+                counter += 1
+        yield denominator, counter
+
+
+print("Количество кратных чисел, из исходного массива:")
+for denominator, counter in divider(9, 99):
+    print(f"{denominator} - {counter}")
