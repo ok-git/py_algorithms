@@ -15,6 +15,7 @@ import sys
 """
 
 
+# НЕ ВЕРНО РЕШЕНО - НЕТ УЧЕТА ПАМЯТИ ЗАНИМАЕМОЙ ЭЛЕМЕНТАМИ МАССИВОВ
 def count_mem(*args):
     return sum(map(sys.getsizeof, [*args]))
 
