@@ -6,7 +6,7 @@
 import random
 
 
-# Адаптация для Python алгоритма простого двухпутевого слияния на псевдокоде с Википедии
+# Адаптация для Python, алгоритма с Википедии, на псевдокоде, простого двухпутевого слияния
 def rec_merge_sort(array):
     if len(array) == 1:
         return array
@@ -36,33 +36,13 @@ def merge(left, right):
         right = right[1:]
     return result
 
-
-def merge_sort(array):
-    for chunk in range(1, len(array) // 2):
-        result = []
-        for i in range(0, len(array), chunk):
-            left = array[i:chunk]
-            right = array[i + chunk:i + chunk + chunk]
-            while len(left) > 0 and len(right) > 0:
-                if left[0] <= right[0]:
-                    result.append(left[0])
-                    left = left[1:]
-                else:
-                    result.append(right[0])
-                    right = right[1:]
-            while len(left) > 0:
-                result.append(left[0])
-                left = left[1:]
-            while len(right) > 0:
-                result.append(right[0])
-                right = right[1:]
-        array = result
-    return array
+# Чужое решение итеративной реализации скачивать не хотелсь, а сам допилить не смог.
+# Чувствую, что рядом ходил, частично уже работало, но времени не хватило, поэтому в зачёт сдаю рекурсивный вариант.
+# def merge_sort(array):
+#     pass
 
 
 array = [random.uniform(0, 49) for _ in range(10)]
 print(array)
 print(rec_merge_sort(array))
-array = [random.uniform(0, 49) for _ in range(6)]
-print(array)
-print(merge_sort(array))
+

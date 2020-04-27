@@ -36,9 +36,9 @@ def sort_bubble(array):  # алгоритм доработанный
 
 
 a_1 = [random.randint(-100, 99) for _ in range(100)]
-a_2 = a_1.copy()
-
 print(a_1)
+
+a_2 = a_1.copy()
 
 # print(timeit.timeit("sort_bubble_lesson(a_1)", number=100, globals=globals()))  # 0.10688 (100 эл.) 10.9536 (1000 эл.)
 # print(timeit.timeit("sort_bubble(a_2)", number=100, globals=globals()))         # 0.00207 (100 эл.) 0.11373 (1000 эл.)
