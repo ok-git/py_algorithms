@@ -8,3 +8,14 @@ func("sova")
 9
 """
 
+
+def hash_subs(string):
+    result = set()
+    for chunk in range(1, len(string)):
+        for i in range(len(string)):
+            result.add(hash(string[i:i + chunk]))
+    return len(result)
+
+
+print(hash_subs("sova"))  # 9
+print(hash_subs("papa"))  # 6
