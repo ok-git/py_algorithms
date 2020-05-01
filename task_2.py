@@ -5,6 +5,17 @@
 import collections
 from tree_model import Tree
 
+
+def search_bst(root, number, path=''):
+    if root.value == number:
+        return f'{path}'
+    if root.value > number and root.left is not None:
+        return search_bst(root.left, number, path=f'{path}0')
+    if root.value < number and root.right is not None:
+        return search_bst(root.right, number, path=f'{path}1')
+    return f'Число {number} отсутствует в дереве'
+
+
 string = "beep boop beer!"
 symbols_counter = collections.Counter(string)
 # Counter({'e': 4, 'b': 3, 'p': 2, ' ': 2, 'o': 2, 'r': 1, '!': 1})
@@ -38,14 +49,6 @@ while len(symbols_counter) > 1:
     symbols_counter.update({t.root: val_1 + val_2})
 
 
-    def search(self, root, number, path=''):
-        if root.value == number:
-            return f'Число {number} найдено по следующему пути:\nКорень{path}'
-        if root.value > number and root.left is not None:
-            return self.search(root.left, number, path=f'{path}\nШаг влево')
-        if root.value < number and root.right is not None:
-            return self.search(root.right, number, path=f'{path}\nШаг вправо')
-        return f'Число {number} отсутствует в дереве'
 
 # while len(symbols_counter) > 1:
 #     key_1, val_1 = symbols_counter.popitem()
@@ -65,4 +68,4 @@ t.print_level_order(t.root)
 
 
 print(symbols_counter)
-
+print(search_bst(t.root, 0))
