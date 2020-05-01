@@ -1,8 +1,9 @@
 class Node:
-    def __init__(self, value=None, left=None, right=None):
+    def __init__(self, value=None, left=None, right=None, data=""):
         self.value = value
         self.left = left
         self.right = right
+        self.data = data
 
     def __repr__(self):
         return f'Node[{self.value:^5}]'
@@ -13,8 +14,8 @@ class Tree:
         self.root = None
 
     # функция для добавления узла в дерево
-    def new_node(self, value):
-        return Node(value, None, None)
+    def new_node(self, value, data=""):
+        return Node(value, None, None, data)
 
     # функция для вычисления высоты дерева
     def height(self, node):
@@ -102,11 +103,11 @@ if __name__ == '__main__':
     print(f'высота: {t.height(t.root)}')
     print(f'ширина: {t.get_max_width(t.root)}')
 
-# ----------------------------------------------------------------------------------------
-#                                        Node[  8  ]
-#                 Node[  4  ]                                 Node[ 12  ]
-#      Node[  2  ]            Node[  6  ]          Node[ 10  ]            Node[ 14  ]
-# Node[  0  ]Node[  3  ]Node[  5  ]Node[  7  ]Node[  9  ]Node[ 11  ]Node[ 13  ]Node[ 15  ]
-# ----------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------
+    #                                        Node[  8  ]
+    #                 Node[  4  ]                                 Node[ 12  ]
+    #      Node[  2  ]            Node[  6  ]          Node[ 10  ]            Node[ 14  ]
+    # Node[  0  ]Node[  3  ]Node[  5  ]Node[  7  ]Node[  9  ]Node[ 11  ]Node[ 13  ]Node[ 15  ]
+    # ----------------------------------------------------------------------------------------
 
     print(t.search(t.root, 9))

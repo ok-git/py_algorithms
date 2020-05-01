@@ -1,28 +1,13 @@
 """
 Закодируйте любую строку по алгоритму Хаффмана.
 """
+
 import collections
 from tree_model import Tree
-from tree_model import Node
-
-class HuffmanNode:
-    def __init__(self, value, left=None, right=None):
-        self.value = value
-        self.left = left
-        self.right = right
-
-    def __repr__(self):
-        # return f'Node[{self.value:^5}]'
-        return f"Node {self.value} - left {self.left} - right {self.right}"
-
-    def __str__(self):
-        return f"{self.value} - {self.left} - {self.right}"
-
 
 string = "beep boop beer!"
 symbols_counter = collections.Counter(string)
 # Counter({'e': 4, 'b': 3, 'p': 2, ' ': 2, 'o': 2, 'r': 1, '!': 1})
-
 # ----------------------------------------------------------------------------------------
 #                                        Node[  8  ]
 #                 Node[  4  ]                                 Node[ 12  ]
@@ -31,14 +16,36 @@ symbols_counter = collections.Counter(string)
 # ----------------------------------------------------------------------------------------
 
 t = Tree()
+i = 0
 while len(symbols_counter) > 1:
-    key_1, val_1 = symbols_counter.popitem()
-    key_2, val_2 = symbols_counter.popitem()
-    t.root = t.new_node(val_1 + val_2)
-    t.root.left = t.new_node(key_1)
-    t.root.right = t.new_node(key_2)
+    pair = symbols_counter.most_common()[:-3:-1]
+    key_1, val_1 = pair[0]
+    key_2, val_2 = pair[1]
+    symbols_counter.pop(key_1)
+    symbols_counter.pop(key_2)
+    t.root = t.new_node(i + 2)
+    if type(key_1) == str and type(key_2) != str:
+        key_1, key_2 = key_2, key_1
+    if type(key_1) == str:
+        t.root.left = t.new_node(i, key_1)
+    else:
+        t.root.left = key_1
+    if type(key_2) == str:
+        t.root.right = t.new_node(i + 1, key_2)
+    else:
+        t.root.right = key_2
+    i += 3
     symbols_counter.update({t.root: val_1 + val_2})
-    # symbols_counter[t.root] = val_1 + val_2
+
+
+    def search(self, root, number, path=''):
+        if root.value == number:
+            return f'Число {number} найдено по следующему пути:\nКорень{path}'
+        if root.value > number and root.left is not None:
+            return self.search(root.left, number, path=f'{path}\nШаг влево')
+        if root.value < number and root.right is not None:
+            return self.search(root.right, number, path=f'{path}\nШаг вправо')
+        return f'Число {number} отсутствует в дереве'
 
 # while len(symbols_counter) > 1:
 #     key_1, val_1 = symbols_counter.popitem()
@@ -50,5 +57,12 @@ while len(symbols_counter) > 1:
 
 t.print_level_order(t.root)
 
+#                                 Node[ 17  ]
+#         Node[ 11  ]                                        Node[ 14  ]
+# Node[  9  ]      Node[  8  ]                    Node[  5  ]            Node[ 13  ]
+#           Node[  6  ]Node[  7  ]          Node[  2  ]     Node[  4  ]
+#                                    Node[  0  ]   Node[  1  ]
+
+
 print(symbols_counter)
-print(len(symbols_counter))
+
