@@ -5,67 +5,47 @@
 import collections
 from tree_model import Tree
 
-
-def search_bst(root, number, path=''):
-    if root.value == number:
-        return f'{path}'
-    if root.value > number and root.left is not None:
-        return search_bst(root.left, number, path=f'{path}0')
-    if root.value < number and root.right is not None:
-        return search_bst(root.right, number, path=f'{path}1')
-    return f'Число {number} отсутствует в дереве'
-
-
 string = "beep boop beer!"
 symbols_counter = collections.Counter(string)
+print(f"\nИсходная строка: {string}")
+print(f"Частоты всех символов: {symbols_counter}\n")
 # Counter({'e': 4, 'b': 3, 'p': 2, ' ': 2, 'o': 2, 'r': 1, '!': 1})
-# ----------------------------------------------------------------------------------------
-#                                        Node[  8  ]
-#                 Node[  4  ]                                 Node[ 12  ]
-#      Node[  2  ]            Node[  6  ]          Node[ 10  ]            Node[ 14  ]
-# Node[  0  ]Node[  3  ]Node[  5  ]Node[  7  ]Node[  9  ]Node[ 11  ]Node[ 13  ]Node[ 15  ]
-# ----------------------------------------------------------------------------------------
 
-t = Tree()
-i = 0
+t = Tree()  # Создаём дерево - использую код из методички, что бы не изобритать велосипед
+i = 0  # Счётчик узлов дерева - в алгоритме не нужен, использую для более наглядной визуализации и отладки
 while len(symbols_counter) > 1:
-    pair = symbols_counter.most_common()[:-3:-1]
-    key_1, val_1 = pair[0]
-    key_2, val_2 = pair[1]
-    symbols_counter.pop(key_1)
-    symbols_counter.pop(key_2)
-    t.root = t.new_node(i + 2)
-    if type(key_1) == str and type(key_2) != str:
-        key_1, key_2 = key_2, key_1
-    if type(key_1) == str:
-        t.root.left = t.new_node(i, key_1)
+    pair = symbols_counter.most_common()[:-3:-1]  # берём пару наименее частых объектов
+    obj_1, counter_1 = pair[0]  # взяли первый объект и его счётчик частот
+    obj_2, counter_2 = pair[1]  # взяли второй объект и его счётчик частот
+    symbols_counter.pop(obj_1)  # удалили первый объект из Counter (почему-то popitem работает как-то странно)
+    symbols_counter.pop(obj_2)  # удалили второй объект из Counter
+    t.root = t.new_node(i + 2)  # создали верхний (корневой) узел дерева
+    if type(obj_1) == str:  # если объект это строка, то создаем новый узел (слева от корня) и помещаем объект в data
+        t.root.left = t.new_node(i, obj_1)
     else:
-        t.root.left = key_1
-    if type(key_2) == str:
-        t.root.right = t.new_node(i + 1, key_2)
+        t.root.left = obj_1  # иначе, объект - это уже узел дерева и тогда "подклеиваем" его в левое ребро
+    if type(obj_2) == str:  # если объект это строка, то создаем новый узел (справа от корня) и помещаем объект в data
+        t.root.right = t.new_node(i + 1, obj_2)
     else:
-        t.root.right = key_2
-    i += 3
-    symbols_counter.update({t.root: val_1 + val_2})
+        t.root.right = obj_2  # иначе, объект - это уже узел дерева и тогда "подклеиваем" его в правое ребро
+    i += 3  # увеличиваем счётчик узлов дерева
+    symbols_counter.update({t.root: counter_1 + counter_2})  # возвращаем созданное дерево в Counter, частоты суммируем
 
+t.print_level_order_with_path(t.root)  # Распечатаем дерево с указанием пути до каждого узла, в скобках
 
+#                 /----------------------- Node[17-''] () -----------------------------\
+#         Node[11-''] (0)                                                            Node[14-''] (1)
+#        /                \                                                        /                 \
+# Node[9 -'b'] (00)      Node[8 -''] (01)                              Node[5 -''] (10)              Node[13-'e'] (11)
+#                            /         \                              /               \
+#                Node[6 -' '] (010)   Node[7 -'p'] (011)      Node[2 -''] (100)       Node[4 -'o'] (101)
+#                                                                /          \
+#                                                  Node[0 -'!'] (1000)   Node[1 -'r'] (1001)
 
-# while len(symbols_counter) > 1:
-#     key_1, val_1 = symbols_counter.popitem()
-#     key_2, val_2 = symbols_counter.popitem()
-#     node = HuffmanNode('')
-#     node.left = HuffmanNode(key_1)
-#     node.right = HuffmanNode(key_2)
-#     symbols_counter[node] = val_1 + val_2
+huffman_codes = t.get_huffman_codes(t.root)
+print('\nТаблица с кодами Хаффмана для символов из исходной строки: ')
+for key, val in huffman_codes.items():
+    print(f'{key} - {val}')
 
-t.print_level_order(t.root)
-
-#                                 Node[ 17  ]
-#         Node[ 11  ]                                        Node[ 14  ]
-# Node[  9  ]      Node[  8  ]                    Node[  5  ]            Node[ 13  ]
-#           Node[  6  ]Node[  7  ]          Node[  2  ]     Node[  4  ]
-#                                    Node[  0  ]   Node[  1  ]
-
-
-print(symbols_counter)
-print(search_bst(t.root, 0))
+coded_string = "".join(huffman_codes[symbol] for symbol in string)
+print(f"\nЗакодированная строка:\n{coded_string}")

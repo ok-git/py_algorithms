@@ -6,7 +6,7 @@ class Node:
         self.data = data
 
     def __repr__(self):
-        return f'Node[{self.value:^5}]'
+        return f"Node[{self.value:^2}-'{self.data}']"
 
 
 class Tree:
@@ -40,6 +40,16 @@ class Tree:
             self.print_given_level(root.left, level - 1)
             self.print_given_level(root.right, level - 1)
 
+    # функция для распечатки элементов на определенном уровне дерева с указнием пути к каждому узлу
+    def print_given_level_with_path(self, root, level, path=''):
+        if root is None:
+            return
+        if level == 1:
+            print(root, f'({path})  ', end='\t')
+        elif level > 1:
+            self.print_given_level_with_path(root.left, level - 1,  f'{path}0')
+            self.print_given_level_with_path(root.right, level - 1,  f'{path}1')
+
     # функция для распечатки дерева
     def print_level_order(self, root):
         h = self.height(root)
@@ -48,6 +58,36 @@ class Tree:
             self.print_given_level(self.root, i)
             print()
             i += 1
+
+    # функция для распечатки дерева с указнием пути к каждому узлу
+    def print_level_order_with_path(self, root):
+        h = self.height(root)
+        i = 1
+        while i <= h:
+            self.print_given_level_with_path(self.root, i)
+            print()
+            i += 1
+
+    # моя адаптация функции для распечатки дерева на определенном уровне для получения кодов Хаффмана
+    def get_huffman_codes_for_given_level(self, root, level, result, path=''):
+        if root is None:
+            return
+        if level == 1:
+            if root.left is None and root.right is None:
+                return result.update({root.data: path})
+        elif level > 1:
+            self.get_huffman_codes_for_given_level(root.left, level - 1, result, f'{path}0')
+            self.get_huffman_codes_for_given_level(root.right, level - 1, result,  f'{path}1')
+
+    # моя адаптация функции для распечатки дерева для получения кодов Хаффмана
+    def get_huffman_codes(self, root):
+        result = {}
+        h = self.height(root)
+        i = 1
+        while i <= h:
+            self.get_huffman_codes_for_given_level(self.root, i, result)
+            i += 1
+        return result
 
     # функция для вычисления ширины дерева
     def get_max_width(self, root):
@@ -71,15 +111,6 @@ class Tree:
             return self.get_width(root.left, level - 1) + self.get_width(root.right, level - 1)
         self.get_width(root.right, level - 1)
 
-    def search(self, root, number, path=''):
-        if root.value == number:
-            return f'Число {number} найдено по следующему пути:\nКорень{path}'
-        if root.value > number and root.left is not None:
-            return self.search(root.left, number, path=f'{path}\nШаг влево')
-        if root.value < number and root.right is not None:
-            return self.search(root.right, number, path=f'{path}\nШаг вправо')
-        return f'Число {number} отсутствует в дереве'
-
 
 if __name__ == '__main__':
     t = Tree()
@@ -102,12 +133,3 @@ if __name__ == '__main__':
     t.print_level_order(t.root)
     print(f'высота: {t.height(t.root)}')
     print(f'ширина: {t.get_max_width(t.root)}')
-
-    # ----------------------------------------------------------------------------------------
-    #                                        Node[  8  ]
-    #                 Node[  4  ]                                 Node[ 12  ]
-    #      Node[  2  ]            Node[  6  ]          Node[ 10  ]            Node[ 14  ]
-    # Node[  0  ]Node[  3  ]Node[  5  ]Node[  7  ]Node[  9  ]Node[ 11  ]Node[ 13  ]Node[ 15  ]
-    # ----------------------------------------------------------------------------------------
-
-    print(t.search(t.root, 9))
